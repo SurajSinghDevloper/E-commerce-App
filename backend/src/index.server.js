@@ -6,9 +6,10 @@ const app = express();
 //routes
 const adminRoutes = require('./routes/admin/auth');
 const userRoutes = require('./routes/auth');
-const categoryRoutes = require('./routes/category')
-const productRoutes = require('./routes/product')
-
+const categoryRoutes = require('./routes/category');
+const productRoutes = require('./routes/product');
+const cartRoutes = require('./routes/cart');
+const path = require('path');
 //enviroment variable or you can say constant 
 env.config();
 
@@ -25,10 +26,12 @@ mongoose.connect(
 });
 //using body parser to parse the json data
 app.use(express.json());
+app.use('/public', express.static(path.join(__dirname, 'uploads')));
 app.use('/api', userRoutes);
 app.use('/api', adminRoutes);
 app.use('/api', categoryRoutes);
 app.use('/api', productRoutes);
+app.use('/api', cartRoutes);
 
 app.listen(process.env.PORT, () => {
     console.log(`Server is Running on PORT ${process.env.PORT}`);
