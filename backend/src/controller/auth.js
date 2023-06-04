@@ -50,71 +50,6 @@ exports.signup = async (req, res) => {
   }
 };
 
-
-// exports.signin = (req, res)=>{
-//   User.findOne({email:req.body.email})
-//   .exec((error, user)=>{
-//     if(error) return res.status(400).json(error);
-//     if(user) {
-//       if(user.authenticate(req.body.password)){
-//         const token = jwt.sign({_id: user._id},process.env.JWT_SECRET,{expiresIn: '1h'});
-//         const { firstName, lastName, email, role, contactNumber, fullName} = user;
-//         res.status(200).json({
-//           token,
-//           user:{
-//             firstName, lastName, email, role, contactNumber, fullName
-//           }
-//         })
-//       }else{
-//         return res.status(400).json({message:"Invalid Credential"})
-//       }
-//     }else{
-//       return res.status(400).json({message:"Something went wrong, Try again!"});
-//     }
-//   })
-
-// }
-
-
-// exports.signin = async (req, res) => {
-//   try {
-//     const user = await User.findOne({ email: req.body.email });
-//     console.log(user, 'from line 71 controller/auth.js');
-//     if (!user) {
-//       return res.status(400).json({ message: "Something went wrong, Try again!" });
-//     }
-
-//     const isPasswordMatch = await user.authenticate(req.body.password);
-
-//     if (!isPasswordMatch) {
-//       return res.status(400).json({ message: "Invalid Credential" });
-//     }
-//     if (!user.role === 'user') {
-//       return res.status(400).json({ message: "Unauthorized access" });
-//     }
-
-//     const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
-
-//     const { _id, firstName, lastName, email, role, fullName, contactNumber } = user;
-
-//     res.status(200).json({
-//       token,
-//       user: {
-//         _id,
-//         firstName,
-//         lastName,
-//         email,
-//         role,
-//         fullName,
-//         contactNumber
-//       },
-//     });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ message: "Internal server error" });
-//   }
-// };
-
 exports.signin = async (req, res) => {
   try {
     // Verify that the email and password are provided in the request body
@@ -168,6 +103,57 @@ exports.signin = async (req, res) => {
   }
 };
 
+
+
+
+// exports.signin = async (req, res) => {
+//   try {
+//     // Verify that the email and password are provided in the request body
+//     if (!req.body.email || !req.body.password) {
+//       return res.status(400).json({ message: "Email and password are required" });
+//     }
+
+//     const user = await User.findOne({ email: req.body.email });
+
+//     // Check if the user exists
+//     if (!user) {
+//       return res.status(400).json({ message: "User Does Not Exist" });
+//     }
+
+//     const isPasswordMatch = await user.authenticate(req.body.password);
+
+//     // Check if the password matches
+//     if (!isPasswordMatch) {
+//       return res.status(400).json({ message: "Invalid credentials" });
+//     }
+
+//     // Check if the user's role is not 'admin'
+//     let role = 'user';
+//     if (user.role && user.role === 'admin') {
+//       role = 'admin';
+//     }
+
+//     const token = jwt.sign({ _id: user._id, role }, process.env.JWT_SECRET, { expiresIn: "2h" });
+
+//     const { _id, firstName, lastName, email, fullName, contactNumber } = user;
+
+//     res.status(200).json({
+//       token,
+//       user: {
+//         _id,
+//         firstName,
+//         lastName,
+//         email,
+//         role,
+//         fullName,
+//         contactNumber
+//       },
+//     });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: "Internal server error" });
+//   }
+// };
 
 
 

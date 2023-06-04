@@ -40,29 +40,6 @@ exports.signup = async (req, res) => {
     }
 }
 
-// exports.signin = (req, res)=>{
-//   User.findOne({email:req.body.email})
-//   .exec((error, user)=>{
-//     if(error) return res.status(400).json(error);
-//     if(user) {
-//       if(user.authenticate(req.body.password)){
-//         const token = jwt.sign({_id: user._id},process.env.JWT_SECRET,{expiresIn: '1h'});
-//         const { firstName, lastName, email, role, contactNumber, fullName} = user;
-//         res.status(200).json({
-//           token,
-//           user:{
-//             firstName, lastName, email, role, contactNumber, fullName
-//           }
-//         })
-//       }else{
-//         return res.status(400).json({message:"Invalid Credential"})
-//       }
-//     }else{
-//       return res.status(400).json({message:"Something went wrong, Try again!"});
-//     }
-//   })
-
-// }
 exports.signin = async (req, res) => {
     try {
         const user = await User.findOne({ email: req.body.email });

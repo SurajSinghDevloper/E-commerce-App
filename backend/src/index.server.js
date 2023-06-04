@@ -1,6 +1,8 @@
 const express = require('express');
 const env = require('dotenv');
+const path = require('path');
 const mongoose = require('mongoose');
+const cors = require('cors');
 const app = express();
 
 
@@ -10,8 +12,6 @@ const userRoutes = require('./routes/auth');
 const categoryRoutes = require('./routes/category');
 const productRoutes = require('./routes/product');
 const cartRoutes = require('./routes/cart');
-const path = require('path');
-const cors = require('cors');
 
 // Load environment variables
 env.config();
@@ -27,11 +27,13 @@ mongoose.connect(
     console.log("Mongo DB connection successfully established 👌👌👌👌");
 });
 
+// Enable CORS
+app.use(cors());
+
+
 // Using body parser to parse JSON data
 app.use(express.json());
 
-// Enable CORS
-app.use(cors());
 
 // Serve static files from the "uploads" directory
 app.use('/public', express.static(path.join(__dirname, 'uploads')));
