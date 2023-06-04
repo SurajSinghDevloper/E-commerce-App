@@ -3,18 +3,20 @@ const env = require('dotenv');
 const mongoose = require('mongoose');
 const app = express();
 
-//routes
+
+// Routes
 const adminRoutes = require('./routes/admin/auth');
 const userRoutes = require('./routes/auth');
 const categoryRoutes = require('./routes/category');
 const productRoutes = require('./routes/product');
 const cartRoutes = require('./routes/cart');
 const path = require('path');
-//enviroment variable or you can say constant 
+const cors = require('cors');
+
+// Load environment variables
 env.config();
 
-//mongodb connection
-//mongodb+srv://suraj31kumar1999:<password>@cluster0.gnqtqdz.mongodb.net/?retryWrites=true&w=majority
+// MongoDB connection
 mongoose.connect(
     process.env.DBURL,
     {
@@ -24,15 +26,24 @@ mongoose.connect(
 ).then(() => {
     console.log("Mongo DB connection successfully established 👌👌👌👌");
 });
-//using body parser to parse the json data
+
+// Using body parser to parse JSON data
 app.use(express.json());
+
+// Enable CORS
+app.use(cors());
+
+// Serve static files from the "uploads" directory
 app.use('/public', express.static(path.join(__dirname, 'uploads')));
+
+// Register routes
 app.use('/api', userRoutes);
 app.use('/api', adminRoutes);
 app.use('/api', categoryRoutes);
 app.use('/api', productRoutes);
 app.use('/api', cartRoutes);
 
+// Start the server
 app.listen(process.env.PORT, () => {
-    console.log(`Server is Running on PORT ${process.env.PORT}`);
+    console.log(`Server is running on PORT ${process.env.PORT}`);
 });
