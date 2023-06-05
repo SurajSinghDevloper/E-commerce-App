@@ -60,10 +60,10 @@ exports.signin = async (req, res) => {
             return res.status(400).json({ message: "Unauthorized access" });
         }
 
-        const token = jwt.sign({ _id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: "1h" });
-
+        const token = jwt.sign({ _id: user._id, role: user.role },
+            process.env.JWT_SECRET, { expiresIn: "10h" });
         const { _id, firstName, lastName, email, role, fullName, contactNumber } = user;
-
+        res.cookie('token', token, { expiresIn: '10h' });
         res.status(200).json({
             token,
             user: {
@@ -80,5 +80,10 @@ exports.signin = async (req, res) => {
         console.error(error);
         res.status(500).json({ message: "Internal server error" });
     }
+};
+
+exports.signout = (req, res) => {
+    res.clearCookie('token');
+    res.status(200).json({ message: "Sign-out Successful" });
 };
 

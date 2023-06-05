@@ -9,31 +9,12 @@ const initialState = {
         picture: ''
     },
     authenticate: false,
-    authenticating: false
+    authenticating: false,
+    loading: false,
+    error: null,
+    message: ''
 };
 
-// const reducer = (state = initialState, action) => {
-//     console.log("🚀 ~ file: auth.reducer.js:8 ~ reducer ~ action:", action)
-//     switch (action.type) {
-//         case authConstant.LOGIN_REQUEST:
-//             return (
-//                 state = {
-//                     ...state,
-//                     authenticating: true
-//                 }
-//             )
-//         case authConstant.LOGIN_SUCCESS:
-//             return (state = {
-//                 ...state,
-//                 user: action.payload.user,
-//                 token: action.payload.token,
-//                 authenticate: true
-//             }
-//             );
-//         default:
-//             return state;
-//     }
-// };
 const reducer = (state = initialState, action) => {
     console.log("🚀 ~ file: auth.reducer.js:8 ~ reducer ~ action:", action);
     switch (action.type) {
@@ -51,7 +32,20 @@ const reducer = (state = initialState, action) => {
                 authenticating: false
             };
         case authConstant.LOGOUT_REQUEST:
-            return initialState
+            return {
+                ...state,
+                loading: true
+            }
+        case authConstant.LOGOUT_SUCCESS:
+            return {
+                ...initialState
+            }
+        case authConstant.LOGOUT_FAILURE:
+            return {
+                ...state,
+                error: action.payload.error,
+                loading: false
+            }
         default:
             return state;
     }
