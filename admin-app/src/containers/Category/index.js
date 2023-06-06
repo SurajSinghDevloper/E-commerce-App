@@ -18,9 +18,15 @@ export default function Category() {
         form.append('name', categoryName);
         form.append('parentId', parentCategoryId);
         form.append('categoryImg', categoryImg);
-        dispatch(addCategory(form));
+        dispatch(addCategory(form))
+            .then(() => {
+                dispatch(getAllCategory()); // Fetch updated category list after adding a new category
+            })
+            .catch((error) => {
+                console.log('Add Category Error:', error);
+            });
         setShow(false);
-    }
+    };
 
     const handleShow = () => setShow(true);
 
@@ -34,7 +40,7 @@ export default function Category() {
         if (Array.isArray(categories)) {
             for (let category of categories) {
                 myCategories.push(
-                    <li key={category.name}>
+                    <li key={category._id}>
                         {category.name}
                         {category.children.length > 0 ? (
                             <ul>{renderCategory(category.children)}</ul>
@@ -54,10 +60,11 @@ export default function Category() {
             }
         }
         return options;
-    }
+    };
+
     const handleCategoryImage = (e) => {
         setCategoryImg(e.target.files[0]);
-    }
+    };
 
     return (
         <Layout sidebar>
@@ -87,7 +94,7 @@ export default function Category() {
                 <Modal.Body>
                     <Input
                         value={categoryName}
-                        palceholder={`Category Name`}
+                        placeholder={`Category Name`}
                         onChange={(e) => setCategoryName(e.target.value)}
                     />
                     <select
@@ -110,5 +117,5 @@ export default function Category() {
                 </Modal.Footer>
             </Modal>
         </Layout>
-    )
+    );
 }

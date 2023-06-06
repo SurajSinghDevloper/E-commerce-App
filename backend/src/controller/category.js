@@ -78,6 +78,7 @@ function createCategoryList(categories, parentId = null) {
                 _id: category._id,
                 name: category.name,
                 slug: category.slug,
+                parentId: category.parentId,
                 children: children
             };
 
