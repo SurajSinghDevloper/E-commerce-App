@@ -44,10 +44,11 @@ const Header = (props) => {
         <>
             <Navbar
                 collapseOnSelect
+                fixed="top"
                 expand="lg"
                 bg="dark"
                 variant="dark"
-                style={{ zIndex: "1" }}
+                style={{ zIndex: "1", height: '50px' }}
             >
                 <Container fluid>
                     <Link to="/" className="navbar-brand">

@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 import { categoryConstant } from "../actions/constant";
 
 const initialState = {
@@ -8,16 +9,27 @@ const initialState = {
 
 const buildNewCategories = (category, categories, parentId) => {
     let myCategories = [];
+    if (parentId == undefined) {
+        return [
+            ...categories,
+            {
+                _id: category._id,
+                name: category.name,
+                slug: category.slug,
+                children: []
+            }
+        ]
+    }
     for (let cat of categories) {
         if (cat._id && cat.parentId == parentId) {
             myCategories.push({
                 ...cat,
-                children: cat.children && cat.children.length > 0 ? buildNewCategories(category, cat.children, parentId) : []
+                children: cat.children ? buildNewCategories(category, cat.children, parentId) : []
             });
         } else {
             myCategories.push({
                 ...cat,
-                children: cat.children && cat.children.length > 0 ? buildNewCategories(category, cat.children, parentId) : []
+                children: cat.children ? buildNewCategories(category, cat.children, parentId) : []
             });
         }
     }

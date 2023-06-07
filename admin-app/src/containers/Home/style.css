@@ -1,9 +1,0 @@
-.sidebar{
-    position:fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    background-color: beige;
-    padding-top: 80px;
-    box-shadow: inset 0 0 0.12px rgb(82, 79, 79);
-}
