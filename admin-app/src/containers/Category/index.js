@@ -60,6 +60,43 @@ export default function Category() {
         return options;
     };
 
+
+
+    // const renderCategory = (categories) => {
+    //     let myCategories = [];
+    //     if (Array.isArray(categories)) {
+    //         for (let category of categories) {
+    //             myCategories.push(
+    //                 <li key={category._id}>
+    //                     {category.name}
+    //                     {category.children && category.children.length > 0 ? (
+    //                         <ul>{renderCategory(category.children)}</ul>
+    //                     ) : null}
+    //                 </li>
+    //             );
+    //         }
+    //     }
+    //     return myCategories;
+    // };
+
+
+
+
+
+    // const createCategoryList = (categories, options = []) => {
+    //     for (let category of categories) {
+    //         options.push({ value: category._id, name: category.name });
+
+    //         if (category.children && category.children.length > 0) {
+    //             createCategoryList(category.children, options);
+    //         }
+    //     }
+
+    //     return options;
+    // };
+
+
+
     const handleCategoryImage = (e) => {
         setCategoryImg(e.target.files[0]);
     };

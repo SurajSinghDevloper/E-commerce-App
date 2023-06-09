@@ -16,6 +16,8 @@ export default function Products() {
     const [productPicture, setProductPicture] = useState([]);
     const [show, setShow] = useState(false);
     const category = useSelector(state => state.category)
+    const product = useSelector(state => state.product)
+    console.log("👉👉 ~~ file: index.js:20 ~~ Products ~~ product:", product)
     const dispatch = useDispatch();
 
 
@@ -58,7 +60,7 @@ export default function Products() {
         ]);
     };
 
-    const renderProducts = () => {
+    const renderProduct = () => {
         return (
             <Table responsive="sm">
                 <thead>
@@ -72,14 +74,19 @@ export default function Products() {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>Table cell</td>
-                        <td>Table cell</td>
-                        <td>Table cell</td>
-                        <td>Table cell</td>
-                        <td>Table cell</td>
-                    </tr>
+                    {product.product.length > 0 ?
+                        product.product.map(product =>
+                            <tr key={product._id}>
+                                <td>1</td>
+                                <td>{product.name}</td>
+                                <td>{product.price}</td>
+                                <td>{product.quantity}</td>
+                                <td>{product.description}</td>
+                                <td>---</td>
+                            </tr>
+                        ) : null
+                    }
+
                 </tbody>
             </Table>
         );
@@ -100,7 +107,7 @@ export default function Products() {
                 </Row>
                 <Row>
                     <Col>
-                        {renderProducts()}
+                        {renderProduct()}
                     </Col>
                 </Row>
             </Container>
