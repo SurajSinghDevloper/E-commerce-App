@@ -2,7 +2,7 @@ const uuid = require('uuid');
 const jwt = require('jsonwebtoken');
 //import user model
 const User = require('../models/user');
-
+const bcrypt = require('bcrypt')
 exports.signup = async (req, res) => {
   try {
     // Check if a user with the same email already exists
@@ -21,14 +21,14 @@ exports.signup = async (req, res) => {
       password,
       contactNumber
     } = req.body;
-
+    const hash_password = await bcrypt.hash(password, 10);
     // Create a new User instance with the extracted data
     const _user = new User({
       firstName,
       lastName,
       email,
       userName: uuid.v4(),
-      password,
+      hash_password,
       role: 'user',
       contactNumber
     });
