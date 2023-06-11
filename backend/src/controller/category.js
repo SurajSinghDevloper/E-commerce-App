@@ -42,17 +42,12 @@ exports.getCategory = async (req, res) => {
     try {
         // Retrieve all categories from the database
         const categories = await Category.find({}).exec();
-        console.log("🚀 ~ file: category.js:119 ~ exports.getCategory= ~ categories:", categories);
-
         if (categories.length > 0) {
             // If categories exist, create the category list
             const categoryList = createCategoryList(categories);
-            console.log("🚀 ~ file: category.js:122 ~ exports.getCategory= ~ categoryList:", categoryList);
-
             // Return the category list in the response
             return res.status(200).json({ categoryList });
         }
-
         // If no categories found, return an empty category list
         return res.status(200).json({ categoryList: [] });
     } catch (error) {

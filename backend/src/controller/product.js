@@ -1,6 +1,7 @@
 const Product = require('../models/product');
-const shortid = require('shortid')
-const slugify = require('slugify')
+const shortid = require('shortid');
+const slugify = require('slugify');
+const Category = require('../models/category');
 
 exports.addProduct = async (req, res) => {
     // Extract the necessary data from the request body
@@ -39,3 +40,49 @@ exports.addProduct = async (req, res) => {
 };
 
 
+
+exports.getProductBySlug = async (req, res) => {
+    try {
+        const { slug } = req.params;
+
+        // Find the category by slug and select only the _id field
+        const category = await Category.findOne({ slug }).select('_id').exec();
+
+        // If category is not found, return a 404 error
+        if (!category) {
+            return res.status(404).json({ error: 'Category not found' });
+        }
+
+        // If category is found
+        if (category) {
+            // Find products that belong to the category
+            const products = await Product.find({ category: category._id }).exec();
+
+            // If there was an error while querying the products
+            if (!products) {
+                return res.status(404).json({ error: 'Something went wrong' });
+            }
+
+            // If there are matching products
+            if (products.length > 0) {
+                res.status(200).json({
+                    products,
+                    productsByPrice: {
+                        under5k: products.filter(product => product.price <= 5000),
+                        under10k: products.filter(product => product.price > 5000 && product.price <= 10000),
+                        under15k: products.filter(product => product.price > 10000 && product.price <= 15000),
+                        under20k: products.filter(product => product.price > 15000 && product.price <= 20000),
+                        under30k: products.filter(product => product.price > 20000 && product.price <= 30000),
+                        moreThan30k: products.filter(product => product.price > 30000)
+                    }
+                });
+            } else {
+                // If no matching products were found
+                res.status(200).json({ message: "Matching products not found" });
+            }
+        }
+    } catch (error) {
+        // If an error occurs during execution
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};

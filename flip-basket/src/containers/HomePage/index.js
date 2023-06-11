@@ -1,13 +1,12 @@
 import React from 'react'
-import Header from '../../components/Header'
-import MenuHeadBar from '../../components/MenuHeader'
+import Layout from '../../components/Layout'
 
 const HomePage = (props) => {
     return (
         <div>
-            <Header />
-            <MenuHeadBar />
-            <h1>Wellcome to Home Page</h1>
+            <Layout>
+                Home Page
+            </Layout>
         </div>
     )
 }
