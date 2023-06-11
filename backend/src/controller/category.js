@@ -1,6 +1,6 @@
 const slugify = require('slugify');
 const Category = require('../models/category');
-
+const shortId = require('shortid')
 //adding category to collection
 
 exports.addCategory = async (req, res) => {
@@ -8,7 +8,7 @@ exports.addCategory = async (req, res) => {
     // Create a category object with name and slug
     const categoryObject = {
         name: req.body.name,
-        slug: slugify(req.body.name)
+        slug: `${slugify(req.body.name)}-${shortId.generate()}`
     };
 
     if (req.file) {
@@ -115,7 +115,19 @@ exports.updateCategories = async (req, res) => {
 }
 
 
-
+exports.deleteCategories = async (req, res) => {
+    const { ids } = req.body.payload;
+    const deletedCategories = [];
+    for (let i = 0; i < ids.length; i++) {
+        const deleteCategory = await Category.findOneAndDelete({ _id: ids[i]._id });
+        deletedCategories.push(deleteCategory);
+    }
+    if (deletedCategories.length == ids.length) {
+        res.status(200).json({ message: "Category Deleted Successfully" });
+    } else {
+        res.status(400).json({ message: "Opps! Something Went Wrong" });
+    }
+}
 
 
 

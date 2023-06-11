@@ -6,7 +6,7 @@ export const getAllCategory = () => {
         dispatch({ type: categoryConstant.GET_ALL_CATEGORY_REQUEST });
         try {
             const res = await axios.get('/category/getCategory');
-            console.log("👉👉 ~~ file: category.action.js:5 ~~ getAllCategory ~~ res:", res);
+            console.log("👉👉 ~~ file: category.action.js:9 ~~ getAllCategory ~~ res:", res);
             if (res.status === 200 || res.status === 201) {
                 const { categoryList } = res.data;
                 if (Array.isArray(categoryList)) { // Check if categoryList is an array
@@ -30,7 +30,7 @@ export const getAllCategory = () => {
                 }
             }
         } catch (error) {
-            console.log("👉👉 ~~ file: category.action.js:5 ~~ getAllCategory ~~ error:", error);
+            console.log("👉👉 ~~ file: category.action.js:33 ~~ getAllCategory ~~ error:", error);
             dispatch({
                 type: categoryConstant.GET_ALL_CATEGORY_FAILURE,
                 payload: {
@@ -46,7 +46,7 @@ export const addCategory = (form) => {
         dispatch({ type: categoryConstant.ADD_NEW_CATEGORY_REQUEST });
         try {
             const res = await axios.post('/category/addCategory', form);
-            console.log("👉👉 ~~ file: category.action.js:32 ~~ addCategory ~~ res:", res);
+            console.log("👉👉 ~~ file: category.action.js:49 ~~ addCategory ~~ res:", res);
             if (res.status === 200 || res.status === 201) {
                 dispatch({
                     type: categoryConstant.ADD_NEW_CATEGORY_SUCCESS,
@@ -59,7 +59,7 @@ export const addCategory = (form) => {
                 });
             }
         } catch (error) {
-            console.log("👉👉 ~~ file: category.action.js:32 ~~ addCategory ~~ error:", error);
+            console.log("👉👉 ~~ file: category.action.js:62 ~~ addCategory ~~ error:", error);
             dispatch({
                 type: categoryConstant.ADD_NEW_CATEGORY_FAILURE,
                 payload: {
@@ -76,11 +76,33 @@ export const updateCategories = (form) => {
         dispatch({ type: categoryConstant.UPDATE_CATEGORY_REQUEST });
         try {
             const res = await axios.post('/category/updateCategory', form);
-            console.log("👉👉 ~~ file: category.action.js:32 ~~ addCategory ~~ res:", res);
+            console.log("👉👉 ~~ file: category.action.js:79 ~~ addCategory ~~ res:", res);
             if (res.status === 200 || res.status === 201) {
                 console.log("👉👉 ~~ file: category.action.js:81 ~~ updateCategories ~~ res:", res)
                 return true;
             } else {
+            }
+        } catch (error) {
+            console.log("👉👉 ~~ file: category.action.js:86 ~~ addCategory ~~ error:", error);
+        }
+    };
+};
+
+export const deleteCategories = (ids) => {
+    return async dispatch => {
+        dispatch({ type: categoryConstant.DELETE_CATEGORY_REQUEST });
+        try {
+            const res = await axios.post('/category/deleteCategory', {
+                payload: {
+                    ids
+                }
+            });
+            console.log("👉👉 ~~ file: category.action.js:100 ~~ addCategory ~~ res:", res);
+            if (res.status === 200) {
+                console.log("👉👉 ~~ file: category.action.js:102 ~~ updateCategories ~~ res:", res)
+                return true;
+            } else {
+                return false;
             }
         } catch (error) {
             console.log("👉👉 ~~ file: category.action.js:32 ~~ addCategory ~~ error:", error);

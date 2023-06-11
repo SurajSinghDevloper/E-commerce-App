@@ -2,17 +2,28 @@ import React, { useState } from 'react';
 import Layout from '../../components/Layout/Index';
 import { Button, Col, Container, Row } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { addCategory, getAllCategory, updateCategories } from '../../actions';
+import {
+    addCategory,
+    getAllCategory,
+    updateCategories,
+    deleteCategories as deleteCategoriesAction
+} from '../../actions';
 import Input from '../../components/UI/input/Index';
 import Modals from '../../components/UI/modal';
 import CheckboxTree from 'react-checkbox-tree';
 import 'react-checkbox-tree/lib/react-checkbox-tree.css';
 import { useCallback } from 'react';
-import { IoIosArrowDropdown, IoIosArrowForward, IoIosCheckbox, IoIosCheckboxOutline, IoIosFolder, IoIosFolderOpen } from 'react-icons/io'
+import {
+    IoIosArrowDropdown,
+    IoIosArrowForward,
+    IoIosCheckbox,
+    IoIosCheckboxOutline,
+    IoIosFolder,
+    IoIosFolderOpen
+} from 'react-icons/io'
 
 export default function Category() {
     const category = useSelector(state => state.category);
-    const dispatch = useDispatch();
     const [show, setShow] = useState(false);
     const [categoryName, setCategoryName] = useState('');
     const [parentCategoryId, setParentCategoryId] = useState('');
@@ -22,6 +33,9 @@ export default function Category() {
     const [checkedArray, setCheckedArray] = useState([]);
     const [expandedArray, setExpandedArray] = useState([]);
     const [updateCategoryModal, setUpdateCategoryModal] = useState(false);
+    const [deleteCategoryModal, setDeleteCategoryModal] = useState(false);
+    const dispatch = useDispatch();
+
 
     const handleClose = () => {
         const form = new FormData();
@@ -73,7 +87,11 @@ export default function Category() {
     };
 
     const updateCategory = () => {
+        updateCheckedAndExpandedCategories()
         setUpdateCategoryModal(true);
+    }
+
+    const updateCheckedAndExpandedCategories = () => {
         const categories = createCategoryList(category.categories);
         const checkedArray = []
         const expandedArray = []
@@ -250,6 +268,62 @@ export default function Category() {
         )
     }
 
+    const deleteCategory = () => {
+        updateCheckedAndExpandedCategories()
+        setDeleteCategoryModal(true);
+    }
+    const deleteCategories = () => {
+        const checkedIdsArray = checkedArray.map((item, index) => ({ _id: item.value }));
+        const expandedIdsArray = expandedArray.map((item, index) => ({ _id: item.value }));
+        const idsArray = expandedIdsArray.concat(checkedIdsArray);
+        dispatch(deleteCategoriesAction(idsArray))
+            .then(result => {
+                if (result) {
+                    dispatch(getAllCategory());
+                    setDeleteCategoryModal(false)
+                }
+            }
+            )
+    }
+    const renderDeleteCategoryModal = () => {
+        console.log('delete', checkedArray);
+        return (
+            <Modals
+                modalTitle="Confirm"
+                show={deleteCategoryModal}
+                handleClose={() => setDeleteCategoryModal(false)}
+                buttons={[
+                    {
+                        label: "No",
+                        color: 'primary',
+                        onClick: () => {
+                            alert('no');
+                        }
+                    },
+                    {
+                        label: "Yes",
+                        color: 'danger',
+                        onClick: deleteCategories
+                    }
+
+                ]}
+            >
+                <h4>Expanded</h4>
+                {
+                    expandedArray.map((item, index) =>
+                        <span key={index}>{item.name}</span>
+                    )
+                }
+                <h4>Checked</h4>
+                {
+                    checkedArray.map((item, index) =>
+                        <span key={index}>{item.name}</span>
+                    )
+                }
+            </Modals>
+        );
+    }
+
     return (
         <Layout sidebar>
             <Container>
@@ -283,7 +357,7 @@ export default function Category() {
                 </Row>
                 <Row>
                     <Col>
-                        <Button>Delete</Button>
+                        <Button onClick={deleteCategory}>Delete</Button>
                         <Button onClick={updateCategory}>Edit</Button>
                     </Col>
                 </Row>
@@ -292,6 +366,8 @@ export default function Category() {
             {renderAddCategoryModal()}
             {/* Edit Categories */}
             {renderUpdateCategoriesModal()}
+            {/* Delete Category */}
+            {renderDeleteCategoryModal()}
         </Layout>
     );
 }
