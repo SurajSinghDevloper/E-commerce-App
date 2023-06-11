@@ -13,6 +13,7 @@ const categoryRoutes = require('./routes/category');
 const productRoutes = require('./routes/product');
 const cartRoutes = require('./routes/cart');
 const initialDataRoutes = require('./routes/admin/initalData');
+// const updateCategories = require('./routes/category');
 
 
 // Load environment variables

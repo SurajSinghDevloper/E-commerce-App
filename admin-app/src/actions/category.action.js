@@ -69,3 +69,21 @@ export const addCategory = (form) => {
         }
     };
 };
+
+
+export const updateCategories = (form) => {
+    return async dispatch => {
+        dispatch({ type: categoryConstant.UPDATE_CATEGORY_REQUEST });
+        try {
+            const res = await axios.post('/category/updateCategory', form);
+            console.log("👉👉 ~~ file: category.action.js:32 ~~ addCategory ~~ res:", res);
+            if (res.status === 200 || res.status === 201) {
+                console.log("👉👉 ~~ file: category.action.js:81 ~~ updateCategories ~~ res:", res)
+                return true;
+            } else {
+            }
+        } catch (error) {
+            console.log("👉👉 ~~ file: category.action.js:32 ~~ addCategory ~~ error:", error);
+        }
+    };
+};

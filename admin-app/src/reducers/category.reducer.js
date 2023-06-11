@@ -36,6 +36,42 @@ const buildNewCategories = (category, categories, parentId) => {
     return myCategories;
 };
 
+// const buildNewCategories = (category, categories, parentId) => {
+//     let myCategories = [];
+//     if (parentId == undefined) {
+//         return [
+//             ...categories,
+//             {
+//                 _id: category._id,
+//                 name: category.name,
+//                 slug: category.slug,
+//                 children: []
+//             }
+//         ]
+//     }
+//     for (let cat of categories) {
+
+//         if (cat._id == parentId) {
+//             const newCategory = {
+//                 _id: category._id,
+//                 name: category.name,
+//                 slug: category.slug,
+//                 parentId: category.parentId,
+//                 children: []
+//             }
+//             myCategories.push({
+//                 ...cat,
+//                 children: cat.children.lenght > 0 ? [...cat.children, newCategory] : [newCategory]
+//             })
+//         } else {
+//             myCategories.push({
+//                 ...cat,
+//                 children: cat.children ? buildNewCategories(parentId, cat.children, category) : []
+//             })
+//         }
+//     }
+// }
+
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case categoryConstant.GET_ALL_CATEGORY_SUCCESS:
