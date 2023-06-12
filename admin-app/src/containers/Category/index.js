@@ -110,7 +110,6 @@ export default function Category() {
         setExpandedArray(expandedArray);
         console.log({ checked, expanded, categories, checkedArray, expandedArray });
     }
-
     const handleCategoryInput = (key, value, index, type) => {
         if (type === "checked") {
             const updatedCheckedArray = checkedArray.map((item, _index) => index === _index ? { ...item, [key]: value } : item);
@@ -182,7 +181,6 @@ export default function Category() {
                         color: 'danger',
                         onClick: deleteCategories
                     }
-
                 ]}
             >
                 <h4>Expanded</h4>
