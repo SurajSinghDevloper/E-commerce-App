@@ -74,6 +74,7 @@ function createCategoryList(categories, parentId = null) {
                 name: category.name,
                 slug: category.slug,
                 parentId: category.parentId,
+                type: category.type,
                 children: children
             };
             // Add the category object to the categoryList
@@ -128,30 +129,3 @@ exports.deleteCategories = async (req, res) => {
         res.status(400).json({ message: "Opps! Something Went Wrong" });
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-// exports.getCategory = async (req, res) => {
-//     //getting only parent category
-//     try {
-//         const categories = await Category.find({}).exec();
-//         console.log("🚀 ~ file: category.js:119 ~ exports.getCategory= ~ categories:", categories)
-//         if (categories.length > 0) {
-//             const categoryList = createCategoryList(categories);
-//             console.log("🚀 ~ file: category.js:122 ~ exports.getCategory= ~ categoryList:", categoryList)
-//             return res.status(200).json({ categoryList });
-//         }
-//         // return res.status(200).json({ categories });
-//     } catch (error) {
-//         return res.status(400).json({ message: error.message });
-//     }
-// };

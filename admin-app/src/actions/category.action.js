@@ -80,7 +80,7 @@ export const updateCategories = (form) => {
                 dispatch({ type: categoryConstant.UPDATE_CATEGORY_SUCCESS });
                 dispatch(getAllCategory());
             } else {
-                const { error } = res
+                const { error } = res.data;
                 dispatch({
                     type: categoryConstant.UPDATE_CATEGORY_FAILURE,
                     payload: { error: error.message }
@@ -101,11 +101,16 @@ export const deleteCategories = (ids) => {
                     ids
                 }
             });
-            console.log("👉👉 ~~ file: category.action.js:100 ~~ addCategory ~~ res:", res);
             if (res.status === 200) {
                 console.log("👉👉 ~~ file: category.action.js:102 ~~ updateCategories ~~ res:", res)
-                return true;
+                dispatch({ type: categoryConstant.DELETE_CATEGORY_SUCCESS });
+                dispatch(getAllCategory);
             } else {
+                const { error } = res.data
+                dispatch({
+                    type: categoryConstant.DELETE_CATEGORY_FAILURE,
+                    payload: { error }
+                })
                 return false;
             }
         } catch (error) {

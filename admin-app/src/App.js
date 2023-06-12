@@ -10,6 +10,7 @@ import { getInitialData, isUserLoggedIn } from './actions';
 import Products from './containers/Products';
 import Orders from './containers/Orders';
 import Category from './containers/Category';
+import NewPage from './containers/NewPage';
 
 function App() {
   const dispatch = useDispatch()
@@ -29,6 +30,7 @@ function App() {
         <Switch>
           <PrivateRoute path="/" exact component={Home} />
           <PrivateRoute path="/productPage" component={Products} />
+          <PrivateRoute path="/page" component={NewPage} />
           <PrivateRoute path="/orderPage" component={Orders} />
           <PrivateRoute path="/categoryPage" component={Category} />
 

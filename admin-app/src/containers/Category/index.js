@@ -69,7 +69,12 @@ export default function Category() {
 
     const createCategoryList = (categories, options = []) => {
         for (let category of categories) {
-            options.push({ value: category._id, name: category.name, parentId: category.parentId });
+            options.push({
+                value: category._id,
+                name: category.name,
+                parentId: category.parentId,
+                type: category.type
+            });
             if (category.children.length > 0) {
                 createCategoryList(category.children, options);
             }
@@ -155,6 +160,8 @@ export default function Category() {
                 }
                 )
         }
+        setDeleteCategoryModal(false)
+        dispatch(getAllCategory());
     }
     const renderDeleteCategoryModal = () => {
         console.log('delete', checkedArray);
@@ -232,8 +239,6 @@ export default function Category() {
                 </Row>
             </Container>
             {/* Add Category */}
-            {/* {renderAddCategoryModal()} */}
-
             <AddCategoryModal
                 show={show}
                 handleClose={handleClose}
@@ -241,7 +246,7 @@ export default function Category() {
                 categoryName={categoryName}
                 setCategoryName={setCategoryName}
                 parentCategoryId={parentCategoryId}
-                setParentCategory={setParentCategoryId}
+                setParentCategoryId={setParentCategoryId}
                 categoryList={categoryList}
                 handleCategoryImage={handleCategoryImage}
             />
