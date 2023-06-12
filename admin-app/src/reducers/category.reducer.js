@@ -97,6 +97,21 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 loading: false,
             };
+        case categoryConstant.UPDATE_CATEGORY_REQUEST:
+            return {
+                ...state,
+                loading: true,
+            };
+        case categoryConstant.UPDATE_CATEGORY_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+            };
+        case categoryConstant.UPDATE_CATEGORY_FAILURE:
+            return {
+                ...state,
+                error: action.payload.error,
+            };
         default:
             return state;
     }
