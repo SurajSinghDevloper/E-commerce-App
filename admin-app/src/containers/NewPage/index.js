@@ -4,7 +4,8 @@ import Modals from '../../components/UI/modal'
 import { Button, Col, Row } from 'react-bootstrap';
 import Input from '../../components/UI/input/Index';
 import linearCategories from '../../helpers/linearCategories';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { createPage } from '../../actions';
 
 const NewPage = () => {
     const [createModal, setCreatModal] = useState(false);
@@ -15,17 +16,50 @@ const NewPage = () => {
     const [desc, setDesc] = useState('');
     const [products, setProducts] = useState([]);
     const [banners, setBanners] = useState([]);
+    const [type, setType] = useState('');
+    const dispatch = useDispatch();
 
     useEffect(() => {
         setCategories(linearCategories(category.categories));
     }, [category.categories]);
 
+    const onCategoryChange = (e) => {
+        const category = categories.find(category => category._id === e.target.value)
+        setCategoriesId(e.target.value);
+        setType(category.type);
+    }
+
     const handleBannerImages = (e) => {
+        setBanners([...banners, e.target.files[0]]);
         console.log(e);
     }
 
     const handleProductImages = (e) => {
+        setProducts([...products, e.target.files[0]]);
         console.log(e);
+    }
+
+    const submitPageForm = (e) => {
+        // e.target.preventDefault();
+        if (title === '') {
+            alert('Title is Required');
+            setCreatModal(false);
+        }
+        const form = new FormData();
+        form.append("title", title);
+        console.log("👉👉 ~~ file: index.js:50 ~~ submitPageForm ~~ title:", title)
+        form.append("description", desc);
+        console.log("👉👉 ~~ file: index.js:51 ~~ submitPageForm ~~ desc:", desc)
+        form.append("category", categoryId);
+        console.log("👉👉 ~~ file: index.js:52 ~~ submitPageForm ~~ categoryId:", categoryId)
+        form.append("type", type);
+        banners.forEach((banner, index) => {
+            form.append('banners', banner);
+        });
+        products.forEach((product, index) => {
+            form.append('products', product);
+        });
+        dispatch(createPage(form));
     }
 
     const renderCreatePageModal = () => {
@@ -33,14 +67,14 @@ const NewPage = () => {
             <Modals
                 show={createModal}
                 modalTitle={'Create New Page'}
-                handleClose={() => setCreatModal(false)}
+                handleClose={submitPageForm}
             >
                 <Row>
                     <Col>
                         <select
                             className='form-control form-control-md'
                             value={categoryId}
-                            onChange={(e) => setCategoriesId(e.target.value)}
+                            onChange={onCategoryChange}
                         >
                             <option>Select Category</option>
                             {
@@ -73,6 +107,16 @@ const NewPage = () => {
                 </Row>
                 <Row>
                     <Col>
+                        {
+                            banners.length > 0 ?
+                                banners.map((banner, index) =>
+                                    <Row>
+                                        <Col key={index}>
+                                            {banner.name}
+                                        </Col>
+                                    </Row>
+                                ) : null
+                        }
                         <input
                             className='form-control form-control-md'
                             type='file'
@@ -81,6 +125,16 @@ const NewPage = () => {
                         />
                     </Col>
                 </Row>&nbsp;
+                {
+                    products.length > 0 ?
+                        products.map((product, index) =>
+                            <Row>
+                                <Col key={index}>
+                                    {product.name}
+                                </Col>
+                            </Row>
+                        ) : null
+                }
                 <Row>
                     <Col>
                         <input
