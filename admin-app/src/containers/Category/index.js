@@ -86,6 +86,7 @@ export default function Category() {
                 parentId: category.parentId,
                 type: category.type
             });
+            console.log("👉👉 ~~ file: index.js:89 ~~ createCategoryList ~~ options:", options)
             if (category.children.length > 0) {
                 createCategoryList(category.children, options);
             }

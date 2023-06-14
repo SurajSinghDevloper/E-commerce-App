@@ -86,3 +86,47 @@ exports.getProductBySlug = async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 };
+
+
+
+exports.updateProduct = async (req, res) => {
+    try {
+        const { productId } = req.params;
+
+        // Extract the necessary data from the request body
+        const { name, price, description, category, quantity } = req.body;
+        let productPicture = [];
+
+        if (req.files && req.files.length > 0) {
+            // If there are files in the request, map them to create the productPicture array
+            productPicture = req.files.map((file) => {
+                return { img: file.filename };
+            });
+        }
+
+        // Find the product by productId and update its fields
+        const updatedProduct = await Product.findByIdAndUpdate(
+            productId,
+            {
+                name,
+                price,
+                description,
+                productPicture,
+                category,
+                quantity,
+            },
+            { new: true } // Return the updated product after the update
+        );
+
+        // If the product is not found, return a 404 error
+        if (!updatedProduct) {
+            return res.status(404).json({ error: 'Product not found' });
+        }
+
+        // Return a success response with the updated product
+        res.status(200).json({ product: updatedProduct });
+    } catch (error) {
+        // Return an error response if there's an error during the process
+        res.status(400).json({ message: error.message });
+    }
+};

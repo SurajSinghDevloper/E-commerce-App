@@ -29,6 +29,7 @@ const pageSchema = new mongoose.Schema({
     category: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Category',
+        unique: true,
         required: true
     },
     createdBy: {
