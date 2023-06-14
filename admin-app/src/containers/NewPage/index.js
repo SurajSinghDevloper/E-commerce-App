@@ -18,13 +18,25 @@ const NewPage = () => {
     const [banners, setBanners] = useState([]);
     const [type, setType] = useState('');
     const dispatch = useDispatch();
+    const page = useSelector(state => state.page);
 
     useEffect(() => {
         setCategories(linearCategories(category.categories));
     }, [category.categories]);
 
+    useEffect(() => {
+        if (!page.loading) {
+            setCreatModal(false);
+            setTitle('');
+            setDesc('');
+            setBanners([]);
+            setProducts([]);
+            setCategoriesId('');
+        }
+    }, [page])
+
     const onCategoryChange = (e) => {
-        const category = categories.find(category => category._id === e.target.value)
+        const category = categories.find(category => category.value === e.target.value)
         setCategoriesId(e.target.value);
         setType(category.type);
     }
@@ -40,18 +52,10 @@ const NewPage = () => {
     }
 
     const submitPageForm = (e) => {
-        // e.target.preventDefault();
-        if (title === '') {
-            alert('Title is Required');
-            setCreatModal(false);
-        }
         const form = new FormData();
         form.append("title", title);
-        console.log("👉👉 ~~ file: index.js:50 ~~ submitPageForm ~~ title:", title)
         form.append("description", desc);
-        console.log("👉👉 ~~ file: index.js:51 ~~ submitPageForm ~~ desc:", desc)
         form.append("category", categoryId);
-        console.log("👉👉 ~~ file: index.js:52 ~~ submitPageForm ~~ categoryId:", categoryId)
         form.append("type", type);
         banners.forEach((banner, index) => {
             form.append('banners', banner);
@@ -59,7 +63,13 @@ const NewPage = () => {
         products.forEach((product, index) => {
             form.append('products', product);
         });
-        dispatch(createPage(form));
+        if (title === '' || desc === '' || categoryId === '' || banners === '' || products === '') {
+            alert('All Fields are Required');
+            setCreatModal(false);
+        } else {
+            dispatch(createPage(form));
+        }
+        setCreatModal(false);
     }
 
     const renderCreatePageModal = () => {
@@ -67,24 +77,18 @@ const NewPage = () => {
             <Modals
                 show={createModal}
                 modalTitle={'Create New Page'}
-                handleClose={submitPageForm}
+                handleClose={() => setCreatModal(false)}
+                onSubmit={submitPageForm}
             >
                 <Row>
                     <Col>
-                        <select
-                            className='form-control form-control-md'
+                        <Input
+                            type='select'
                             value={categoryId}
                             onChange={onCategoryChange}
-                        >
-                            <option>Select Category</option>
-                            {
-                                categories.map((cat) => (
-                                    <option key={cat._id} value={cat._id}>
-                                        {cat.name}
-                                    </option>
-                                ))
-                            }
-                        </select>
+                            option={categories}
+                            placeholder={'Select Category'}
+                        />
                     </Col>
                 </Row>&nbsp;
                 <Row>
@@ -151,8 +155,15 @@ const NewPage = () => {
 
     return (
         <Layout sidebar>
-            {renderCreatePageModal()}
-            <Button onClick={() => setCreatModal(true)}>Create Page</Button>
+            {
+                page.loading ?
+                    <p>Creating Page... please wait!</p>
+                    :
+                    <>
+                        {renderCreatePageModal()}
+                        <Button Button onClick={() => setCreatModal(true)}>Create Page</Button>
+                    </>
+            }
         </Layout>
     )
 }

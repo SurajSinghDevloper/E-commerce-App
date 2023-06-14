@@ -70,6 +70,7 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 loading: false,
+                error: action.payload.error
             };
         case categoryConstant.UPDATE_CATEGORY_REQUEST:
             return {

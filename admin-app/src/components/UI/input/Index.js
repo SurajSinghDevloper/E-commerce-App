@@ -2,9 +2,30 @@ import React from 'react'
 import { Form } from 'react-bootstrap'
 
 export default function Input(props) {
-    return (
-        <>
-            <Form.Group>
+    const { option } = props
+    let input = null;
+    switch (props.type) {
+        case 'select':
+            input = <Form.Group>
+                {props.label && <Form.Label>{props.label}</Form.Label>}
+                <select
+                    className='form-control form-control-md'
+                    value={props.value}
+                    onChange={props.onChange}
+                >
+                    <option value=''>{props.placeholder}</option>
+                    {
+                        option.length > 0 ?
+                            option.map((option, index) =>
+                                <option key={index} value={option.value}>{option.name}</option>
+                            ) : null
+                    }
+                </select>
+            </Form.Group>
+            break
+        case 'text':
+        default:
+            input = <Form.Group>
                 {props.label && <Form.Label>{props.label}</Form.Label>}
                 <Form.Control
                     type={props.type}
@@ -16,6 +37,22 @@ export default function Input(props) {
                     {props.errorMessage}
                 </Form.Text>
             </Form.Group>
-        </>
-    )
+    }
+    return input
 }
+// return (
+//     <>
+//         <Form.Group>
+//             {props.label && <Form.Label>{props.label}</Form.Label>}
+//             <Form.Control
+//                 type={props.type}
+//                 placeholder={props.placeholder}
+//                 value={props.value}
+//                 onChange={props.onChange}
+//             />
+//             <Form.Text className="text-muted">
+//                 {props.errorMessage}
+//             </Form.Text>
+//         </Form.Group>
+//     </>
+// )

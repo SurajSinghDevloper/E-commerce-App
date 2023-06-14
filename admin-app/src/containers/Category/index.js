@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Layout from '../../components/Layout/Index';
 import { Button, Col, Container, Row } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
@@ -40,7 +40,18 @@ export default function Category() {
     const dispatch = useDispatch();
 
 
+    useEffect(() => {
+        if (!category.loading) {
+            setShow(false);
+        }
+    }, [category.loading])
+
     const handleClose = () => {
+        if (categoryName === '') {
+            alert("Category name is required");
+            setShow(false)
+            return;
+        }
         const form = new FormData();
         form.append('name', categoryName);
         form.append('parentId', parentCategoryId);
@@ -117,10 +128,12 @@ export default function Category() {
     }
     const handleCategoryInput = (key, value, index, type) => {
         if (type === "checked") {
-            const updatedCheckedArray = checkedArray.map((item, _index) => index === _index ? { ...item, [key]: value } : item);
+            const updatedCheckedArray = checkedArray.map((item, _index) =>
+                index === _index ? { ...item, [key]: value } : item);
             setCheckedArray(updatedCheckedArray);
         } else if (type === "expanded") {
-            const updatedExpandedArray = expandedArray.map((item, _index) => index === _index ? { ...item, [key]: value } : item);
+            const updatedExpandedArray = expandedArray.map((item, _index) =>
+                index === _index ? { ...item, [key]: value } : item);
             setExpandedArray(updatedExpandedArray);
         }
     }
@@ -164,7 +177,6 @@ export default function Category() {
         dispatch(getAllCategory());
     }
     const renderDeleteCategoryModal = () => {
-        console.log('delete', checkedArray);
         return (
             <Modals
                 modalTitle="Confirm"
@@ -241,7 +253,8 @@ export default function Category() {
             {/* Add Category */}
             <AddCategoryModal
                 show={show}
-                handleClose={handleClose}
+                handleClose={() => setShow(false)}
+                onSubmit={handleClose}
                 modalTitle={'Add New Categories'}
                 categoryName={categoryName}
                 setCategoryName={setCategoryName}
@@ -255,7 +268,8 @@ export default function Category() {
 
             <UpdateCategoriesModal
                 show={updateCategoryModal}
-                handleClose={updateCategoryForm}
+                handleClose={() => setUpdateCategoryModal(false)}
+                onSubmit={updateCategoryForm}
                 modalTitle={'Update Categories'}
                 size="lg"
                 expandedArray={expandedArray}
