@@ -38,3 +38,26 @@ export const getProductPage = (payload) => {
         }
     }
 }
+
+export const getProductDetailsById = (payload) => {
+    return async (dispatch) => {
+        dispatch({ type: productConstant.GET_PRODUCT_DETAILS_BY_ID_REQUEST });
+        try {
+            const { productsId } = payload.params;
+            console.log("👉💀💀💀👉 ~~ file: product.action.js:48 ~~ getProductDetailsById ~~ productsId:", productsId);
+            const response = await axios.get(`/product/${productsId}`);
+            dispatch({
+                type: productConstant.GET_PRODUCT_DETAILS_BY_ID_SUCCESS,
+                payload: {
+                    productDetails: response.data.result // Update the property name to 'result'
+                }
+            });
+        } catch (error) {
+            console.log("👉👉 ~~ file: product.action.js:57 ~~ getProductDetailsById ~~ error:", error);
+            dispatch({
+                type: productConstant.GET_PRODUCT_DETAILS_BY_ID_FAILURE,
+                payload: { error }
+            });
+        }
+    };
+};

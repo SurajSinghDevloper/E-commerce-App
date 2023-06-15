@@ -2,6 +2,7 @@ const Product = require('../models/product');
 const shortid = require('shortid');
 const slugify = require('slugify');
 const Category = require('../models/category');
+const { Error } = require('mongoose');
 
 exports.addProduct = async (req, res) => {
     // Extract the necessary data from the request body
@@ -130,3 +131,20 @@ exports.updateProduct = async (req, res) => {
         res.status(400).json({ message: error.message });
     }
 };
+
+exports.getProductDetailsById = async (req, res) => {
+    const { productsId } = req.params;
+    let result;
+    if (productsId && productsId) {
+        result = await Product.findOne({ _id: productsId }).exec()
+        console.log("👉👉 ~~ file: product.js:140 ~~ result:", result)
+        if (res) {
+            res.status(200).json({ result });
+        } else {
+            res.status(200).json({ message: "something went Wrong / try Again" });
+        }
+    } else {
+        res.status(400).json({ message: 'Params Required...!' })
+    }
+}
+

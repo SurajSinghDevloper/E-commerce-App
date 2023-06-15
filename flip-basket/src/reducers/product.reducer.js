@@ -12,6 +12,8 @@ const initialState = {
     },
     pageRequest: false,
     pages: {},
+    productDetails: {},
+    loading: false,
     error: null
 };
 
@@ -37,6 +39,23 @@ export default function productReducer(state = initialState, action) {
                 pageRequest: false
             };
         case productConstant.GET_PRODUCT_PAGE_FAILURE:
+            return {
+                ...state,
+                pageRequest: false,
+                error: action.payload.error
+            };
+        case productConstant.GET_PRODUCT_DETAILS_BY_ID_REQUEST:
+            return {
+                ...state,
+                pageRequest: true
+            };
+        case productConstant.GET_PRODUCT_DETAILS_BY_ID_SUCCESS:
+            return {
+                ...state,
+                productDetails: action.payload.productDetails,
+                loading: false
+            };
+        case productConstant.GET_PRODUCT_DETAILS_BY_ID_FAILURE:
             return {
                 ...state,
                 pageRequest: false,

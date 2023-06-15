@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './style.css';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import flipBasket from '../../images/HeaderWhitLogo.png';
 // import Assured from '../../images/TA2.png';
 import { IoIosArrowDown, IoIosCart, IoIosSearch } from 'react-icons/io';
@@ -22,10 +22,66 @@ const Header = (props) => {
     const [loginModal, setLoginModal] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const auth = useSelector(state => state.auth);
     const dispatch = useDispatch();
 
+
     const userLogin = () => {
-        dispatch(login({ email, password }))
+        dispatch(login({ email, password }));
+    }
+    useEffect(() => {
+        if (auth.authenticate) {
+            setLoginModal(false);
+        }
+    }, [auth.authenticate])
+
+    const renderLoggedInMenu = () => {
+        return (
+            <DropdownMenu
+                menu={
+                    <a className='firstName'>
+                        {auth.user.firstName}
+                    </a>
+                }
+                menus={[
+                    { label: 'My Profile', href: '', icon: null },
+                    { label: 'My Coins', href: '', icon: null },
+                    { label: 'FlipBasket Plus Zone', href: '', icon: null },
+                    { label: 'Orders', href: '', icon: null },
+                    { label: 'Wishlist', href: '', icon: null },
+                    { label: 'My Chats', href: '', icon: null },
+                    { label: 'Rewards', href: '', icon: null },
+                    { label: 'Notification', href: '', icon: null },
+                    { label: 'Gift Cards', href: '', icon: null },
+                    { label: 'Logout', href: '', icon: null },
+                ]}
+            />
+        );
+    }
+    const renderNonLoggedInMenu = () => {
+        return (
+            <DropdownMenu
+                menu={
+                    <a className="loginButton" onClick={() => setLoginModal(true)}>
+                        Login
+                    </a>
+                }
+                menus={[
+                    { label: 'My Profile', href: '', icon: null },
+                    { label: 'FlipBasket Plus Zone', href: '', icon: null },
+                    { label: 'Orders', href: '', icon: null },
+                    { label: 'Wishlist', href: '', icon: null },
+                    { label: 'Rewards', href: '', icon: null },
+                    { label: 'Gift Cards', href: '', icon: null },
+                ]}
+                firstMenu={
+                    <div className="firstmenu">
+                        <span>New Customer?</span>
+                        <a style={{ color: '#2874f0' }}>Sign Up</a>
+                    </div>
+                }
+            />
+        );
     }
 
     return (
@@ -116,27 +172,10 @@ const Header = (props) => {
 
                 {/* Right Side Menu--------------------- */}
                 <div className="rightMenu">
-                    <DropdownMenu
-                        menu={
-                            <a className="loginButton" onClick={() => setLoginModal(true)}>
-                                Login
-                            </a>
-                        }
-                        menus={[
-                            { label: 'My Profile', href: '', icon: null },
-                            { label: 'FlipBasket Plus Zone', href: '', icon: null },
-                            { label: 'Orders', href: '', icon: null },
-                            { label: 'Wishlist', href: '', icon: null },
-                            { label: 'Rewards', href: '', icon: null },
-                            { label: 'Gift Cards', href: '', icon: null },
-                        ]}
-                        firstMenu={
-                            <div className="firstmenu">
-                                <span>New Customer?</span>
-                                <a style={{ color: '#2874f0' }}>Sign Up</a>
-                            </div>
-                        }
-                    />
+                    {
+                        auth.authenticate ?
+                            renderLoggedInMenu() : renderNonLoggedInMenu()
+                    }
                     <DropdownMenu
                         menu={
                             <a className="more">

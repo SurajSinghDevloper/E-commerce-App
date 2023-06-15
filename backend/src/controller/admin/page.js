@@ -87,7 +87,6 @@ exports.getPage = async (req, res) => {
     if (type === 'page') {
         try {
             const pages = await Page.findOne({ category: category }).exec();
-            console.log("👉👉 ~~ file: page.js:90 ~~ exports.getPage= ~~ pages:", pages)
             if (pages) {
                 res.status(200).json({ pages });
             } else {
