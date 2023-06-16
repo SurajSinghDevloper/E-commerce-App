@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import Layout from '../../components/Layout';
 import { useDispatch, useSelector } from 'react-redux';
-import { getProductDetailsById } from '../../actions';
+import { addToCart, getProductDetailsById } from '../../actions';
 import { generatePublicUrl } from '../../urlConfig';
 import { MaterialButton } from '../../components/MaterialUI';
 import { IoIosArrowForward, IoIosStar, IoMdCart } from 'react-icons/io';
@@ -14,6 +14,7 @@ const ProductDetailsPage = (props) => {
     const products = useSelector(state => state.products);
 
     const { productDetails } = useSelector(state => state.products);
+    console.log("👉🔎🔎🔎👉 ~~ file: index.js:17 ~~ ProductDetailsPage ~~ productDetails:", productDetails.productPicture)
     const { productsId } = props.match.params;
 
     useEffect(() => {
@@ -30,7 +31,7 @@ const ProductDetailsPage = (props) => {
     }
     return (
         <Layout>
-            {/* <div>{product.productDetails.name}</div> */}
+            {/* <div>{products.productDetails.name}</div> */}
             <div className="productDescriptionContainer">
                 <div >
 
@@ -72,12 +73,21 @@ const ProductDetailsPage = (props) => {
                                     marginRight: "5px",
                                 }}
                                 icon={<IoMdCart style={{ fontSize: '25px' }} />}
+                                // onClick={() => {
+                                //     const { _id, name, price } = products.productDetails;
+                                //     const img = products.productDetails.productPictures[0].img;
+                                //     dispatch(addToCart({ _id, name, price, img }));
+                                //     props.history.push(`/cart`);
+                                // }}
+
                                 onClick={() => {
                                     const { _id, name, price } = products.productDetails;
-                                    const img = products.productDetails.productPictures[0].img;
-                                    // dispatch(addToCart({ _id, name, price, img }));
+
+                                    const img = productDetails.productPicture && productDetails.productPicture.length > 0 ? productDetails.productPicture[0].img : null;
+                                    dispatch(addToCart({ _id, name, price, img }));
                                     props.history.push(`/cart`);
                                 }}
+
                             />
 
                         </div>

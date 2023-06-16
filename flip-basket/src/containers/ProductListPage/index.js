@@ -1,7 +1,7 @@
 import React from 'react'
 import Layout from '../../components/Layout'
 import './style.css'
-import ProductStore from '../ProductStore';
+import ProductStore from './ProductStore';
 import getParams from '../../utils/getParams';
 import ProductPage from './productPage';
 
