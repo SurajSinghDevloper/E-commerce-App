@@ -1,35 +1,56 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Layout from '../../components/Layout'
 import Card from '../../components/UI/Card'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import './style.css'
+import CartItem from './CartItem/Index'
+import { addToCart } from '../../actions'
 
 
 const CardPage = (props) => {
     const cart = useSelector(state => state.cart);
-    const cartItems = cart.cartItems;
+    // const cartItems = cart.cartItems;
+    const dispatch = useDispatch();
+    const [cartItems, setCartItems] = useState(cart.cartItems);
+    useEffect(() => {
+        setCartItems(cart.cartItems)
+    }, [cart.cartItems]);
+
+
+    const onQuantityIncrement = (_id, qty) => {
+        console.log(_id, qty);
+        const { name, price, img } = cartItems[_id];
+        dispatch(addToCart({ _id, name, price, img }, 1));
+
+    }
+    const onQuantityDecrement = (_id, qty) => {
+        console.log(_id, qty);
+        const { name, price, img } = cartItems[_id];
+        dispatch(addToCart({ _id, name, price, img }, -1));
+    };
+
     return (
         <Layout>
-            <div className='cartContainer'>
+            <div className='cartContainer' style={{ alignItem: 'flex-start' }}>
                 <Card
                     headerLeft={`My Cart`}
-                    headerRight={<div>Deliver To</div>}
+                    headerRight={<div style={{ marginLeft: '200px' }}>Deliver To</div>}
                 >
                     {
                         Object.keys(cartItems).map((key, index) =>
-                            <div key={index} className='flexRow'>
-                                <div className='cartProductContainer'>
-                                    <img src='' alt='..' />
-                                </div>
-                                <div className='cartItemDetails'>
-                                    <div>{cartItems[key].name}  Qty - {cartItems[key].qty}</div>
-                                    <div>Delivery in 3-5 Days</div>
-                                </div>
-                            </div>
+                            <CartItem
+                                key={index}
+                                cartItem={cartItems[key]}
+                                onQuantityInc={onQuantityIncrement}
+                                onQuantityDec={onQuantityDecrement}
+                            />
                         )
                     }
                 </Card>
-                <Card style={{ width: '500px' }}>Price</Card>
+                <Card
+                    style={{ width: '500px' }}
+                    headerLeft='price'
+                ></Card>
             </div>
         </Layout>
     )

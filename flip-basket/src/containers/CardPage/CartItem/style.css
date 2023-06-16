@@ -1,7 +1,6 @@
 .cartItemContainer {
     margin: 10px 5px;
 }
-
 .cartProImgContainer {
     width: 112px;
     height: 112px;
@@ -35,7 +34,8 @@
 }
 
 .cartActionBtn {
-    margin: 0 10px;
+    margin:0 10px;
+    font-display: flex;
     font-family: 'Roboto';
     font-weight: 600;
     text-transform: uppercase;
