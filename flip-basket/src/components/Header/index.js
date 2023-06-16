@@ -10,7 +10,7 @@ import {
     MaterialButton,
     DropdownMenu
 } from '../MaterialUI';
-import { login } from '../../actions/auth.action';
+import { login, signout } from '../../actions/auth.action';
 
 /**
 * @author
@@ -25,6 +25,9 @@ const Header = (props) => {
     const auth = useSelector(state => state.auth);
     const dispatch = useDispatch();
 
+    const logout = () => {
+        dispatch(signout());
+    }
 
     const userLogin = () => {
         dispatch(login({ email, password }));
@@ -53,7 +56,7 @@ const Header = (props) => {
                     { label: 'Rewards', href: '', icon: null },
                     { label: 'Notification', href: '', icon: null },
                     { label: 'Gift Cards', href: '', icon: null },
-                    { label: 'Logout', href: '', icon: null },
+                    { label: 'Logout', href: '', icon: null, onClick: logout },
                 ]}
             />
         );
